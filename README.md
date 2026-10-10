@@ -1,64 +1,64 @@
 # Shulker Helper — Fabric
 
-Client-side Fabric мод для Minecraft: просмотр содержимого шалкеров и бандлов без их установки, быстрое чтение, метки и сортировка.
+A client-side Fabric mod for Minecraft that lets you preview shulker box and bundle contents without placing them, quickly inspect items, add labels, and sort contents.
 
-Версия: **1.3.0** · Загрузчик: **Fabric Loader >= 0.16.10** · Среда: **client only**
+Version: **1.3.0** · Loader: **Fabric Loader >= 0.16.10** · Environment: **client only**
 
-## Возможности (v1.3.0)
+## Features (v1.3.0)
 
-- **Preview (просмотр):** наведите на шалкер/бандл в любом контейнере и нажмите `ALT + Shift` — всплывёт тултип с содержимым.
-- **Open (чтение):** `Shift + Ctrl` (комбинация клавиши Open) — открывает содержимое в режиме read-only экране `ShulkerContentViewScreen`, не трогая серверный инвентарь.
-- **Portable open (настоящее открытие):** `ПКМ` по шалкеру прямо из инвентаря — открывает реальное серверное меню. Работает **только в одиночной игре** (`from_inventory_only`).
-- **Метки (Marks):** редактор метки шалкера — название + иконка. Хранится локально на клиенте (`ShulkerMarkStore`), бейдж рисуется поверх слота.
-- **Сортировка:** кнопка `Sort` в GUI — сортировка по ценности (`ItemValueComparator`). Только одиночная игра. Сообщения: `sorted / sorting / already_sorted / no_space`.
-- **Подсказки в тултипе:** строки `Preview: / Open: / Mark:`, `+N more / ещё N`.
-- **Языки:** `en_us`, `ru_ru`.
-- **Рендер поверх инвентарей:** миксин `AbstractContainerScreenMixin` + `ShulkerViewerRenderer`, кнопка сортировки `ShulkerSortHook`.
+- **Preview:** Hover over a shulker box or bundle in any container and press `ALT + Shift` to display a tooltip with its contents.
+- **Open (read-only):** Press `Shift + Ctrl` (the Open keybind) to view the contents in the read-only `ShulkerContentViewScreen` without modifying the server-side inventory.
+- **Portable Open (actual opening):** Right-click a shulker box directly from your inventory to open its actual server-side menu. Works **only in singleplayer** (`from_inventory_only`).
+- **Marks:** Edit a shulker box label, including its name and icon. Labels are stored locally on the client using `ShulkerMarkStore`, and a badge is rendered over the inventory slot.
+- **Sorting:** The `Sort` button in the GUI sorts items by value using `ItemValueComparator`. Singleplayer only. Messages: `sorted / sorting / already_sorted / no_space`.
+- **Tooltip hints:** Displays the `Preview: / Open: / Mark:` lines and `+N more` when additional items are present.
+- **Languages:** `en_us`, `ru_ru`.
+- **Inventory overlay rendering:** Uses the `AbstractContainerScreenMixin` mixin and `ShulkerViewerRenderer`, with the sorting button handled by `ShulkerSortHook`.
 
-## Поддерживаемые версии Minecraft
+## Supported Minecraft Versions
 
-Ветка `1.21.x` (обфусцированная, через `fabric-loom-remap` + Mojang Mappings):
+The `1.21.x` branch (obfuscated, using `fabric-loom-remap` + Mojang Mappings):
 
 - 1.21, 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11
 
-Ветка `26.x` (необфусцированная, через `fabric-loom`):
+The `26.x` branch (unobfuscated, using `fabric-loom`):
 
 - 26.1, 26.1.1, 26.1.2, 26.2, 26.3
 
-Исходники разбиты по source-set'ам:
+Source code is organized into separate source sets:
 
+```text
+src/main/java            — shared code (util, mixin interfaces, portable, sort, renderer)
+src/V1_21_1, V1_21_2, V1_21_5, V1_21_6, V1_21_9, V1_21_11 — variants for 1.21.x
+src/V26, V26_2, V26_3    — variants for 26.x (with their own fabric.mod.json and mixin JSON files)
 ```
-src/main/java            — общий код (util, mixin-интерфейсы, portable, sort, renderer)
-src/V1_21_1, V1_21_2, V1_21_5, V1_21_6, V1_21_9, V1_21_11 — варианты под 1.21.x
-src/V26, V26_2, V26_3    — варианты под 26.x (+ свои fabric.mod.json и mixin-json)
-```
 
-Выбор ветки — через свойство `mc_group` в `gradle.properties`.
+Select the branch using the `mc_group` property in `gradle.properties`.
 
-## Управление по умолчанию
+## Default Controls
 
-| Действие | Клавиша (по умолчанию) | Строка локализации |
+| Action | Default Keybind | Localization Key |
 |---|---|---|
 | Preview Shulker Contents | `ALT` + `Shift` | `key.shulker-viewer.preview` |
 | Open Shulker Contents | `Shift` + `Ctrl` | `key.shulker-viewer.open` |
-| Edit Shulker Mark | настраивается | `key.shulker-viewer.mark` |
-| Portable open (реальное) | `ПКМ` | `shulker-viewer.hint.real` |
+| Edit Shulker Mark | Configurable | `key.shulker-viewer.mark` |
+| Portable Open (actual opening) | `Right-click` | `shulker-viewer.hint.real` |
 
-Все бинды переназначаются в Настройки → Управление → `Shulker Helper`.
+All keybinds can be changed under **Options → Controls → Shulker Helper**.
 
-## Сборка
+## Building
 
-Требуется JDK 21 (для 1.21.x) / JDK 25 (для 26.x). Версия выбирается автоматически из `mc_group` в `build.gradle`.
+Requires JDK 21 for 1.21.x or JDK 25 for 26.x. The version is selected automatically based on `mc_group` in `build.gradle`.
 
 ```bash
-# Текущая версия по умолчанию (см. gradle.properties): mc 26.3, mod 1.3.0
+# Default version (see gradle.properties): Minecraft 26.3, mod 1.3.0
 ./gradlew build
 
-# Готовый jar ляжет в Versions/
+# The compiled JAR will be placed in Versions/
 # Shulker Helper 1.3.0 [26.3]-Fabric.jar
 ```
 
-Смена версии Minecraft — поменять в `gradle.properties`:
+To change the Minecraft version, update `gradle.properties`:
 
 ```properties
 minecraft_version=1.21.11
@@ -66,23 +66,23 @@ fabric_api_version=0.134.0+1.21.11
 mc_group=V1_21_11
 ```
 
-и пересобрать.
+Then rebuild the project.
 
-## Установка для игроков
+## Installation for Players
 
-1. Установи Fabric Loader + Fabric API под свою версию Minecraft.
-2. Скачай `Shulker Helper 1.3.0 [ТВОЯ_ВЕРСИЯ]-Fabric.jar` из [Releases](../../releases).
-3. Положи в папку `mods/`.
-4. Мод клиентский — на сервер ставить не нужно.
+1. Install Fabric Loader and Fabric API for your Minecraft version.
+2. Download `Shulker Helper 1.3.0 [YOUR_VERSION]-Fabric.jar` from [Releases](../../releases).
+3. Place the JAR file in your `mods/` folder.
+4. This is a client-side mod — **it does not need to be installed on the server**.
 
-## Структура проекта
+## Project Structure
 
 - `src/main/java/com/shulkerviewer/` — `client/`, `gui/`, `mark/`, `mixin/`, `portable/`, `renderer/`, `sort/`, `util/`
 - `src/main/resources/fabric.mod.json` — `id: shulker-viewer`, `license: MIT`, `environment: client`
-- `src/main/resources/shulker-viewer.client.mixins.json` — клиентские миксины
+- `src/main/resources/shulker-viewer.client.mixins.json` — client-side mixins
 - `src/*/resources/assets/shulker-viewer/lang/` — `en_us.json`, `ru_ru.json`
-- `build.gradle` / `settings.gradle` / `gradle.properties` — мульти-версионная сборка через Loom
+- `build.gradle` / `settings.gradle` / `gradle.properties` — multi-version build configuration using Loom
 
-## Лицензия
+## License
 
-MIT — см. [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
