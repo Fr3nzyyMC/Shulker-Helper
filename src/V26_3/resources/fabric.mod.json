@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "shulker-viewer",
+  "version": "${version}",
+  "name": "Shulker Helper",
+  "description": "Preview the contents of shulker boxes and bundles without opening them",
+  "authors": ["Fr3nzyyMC"],
+  "contact": {
+    "homepage": "https://github.com/Fr3nzyyMC/Shulker-Helper",
+    "sources": "https://github.com/Fr3nzyyMC/Shulker-Helper"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "icon": "assets/shulker-viewer/icon.png",
+  "entrypoints": {
+    "client": ["com.shulkerviewer.client.ShulkerViewerClient"]
+  },
+  "mixins": [
+    {
+      "config": "shulker-viewer.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "*",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

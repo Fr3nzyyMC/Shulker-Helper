@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.shulkerviewer.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "AbstractContainerScreenMixin26",
+    "ShulkerOverrideMixin26",
+    "ShulkerEnchantMixin26",
+    "ShulkerAnvilMixin26",
+    "ShulkerMerchantMixin26",
+    "AbstractContainerScreenAccessor",
+    "InventoryAccessor",
+    "ItemStackMixin",
+    "KeyMappingAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

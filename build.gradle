@@ -1,0 +1,109 @@
+// NOTE: the Loom plugin is applied conditionally below because 26.1+ is
+// unobfuscated and needs the new plugin. Versions are pinned in settings.gradle.
+def mc_group = project.properties['mc_group'] ?: 'V1_21_11'
+def is26 = mc_group.startsWith('V26')
+
+if (is26) {
+    apply plugin: 'net.fabricmc.fabric-loom'
+} else {
+    apply plugin: 'net.fabricmc.fabric-loom-remap'
+}
+apply plugin: 'maven-publish'
+
+def mod_id = project.properties['mod_id']
+def javaRelease = (project.properties['java_version'] ?: (is26 ? '25' : '21')) as int
+
+base {
+    archivesName = project.properties['archives_base_name']
+}
+
+version = project.version
+group = project.group
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java", "src/${mc_group}/java"]
+            if (is26) {
+                // V26 provides its own variant (extraction + templates APIs).
+                // NOTE: excludes match all srcDirs, hence the renamed class.
+                exclude 'com/shulkerviewer/mixin/AbstractContainerScreenMixin.java'
+            }
+        }
+        resources {
+            if (is26) {
+                // Full mirror: excludes would also match this dir (same
+                // relative paths), so 26.x uses its own resources root.
+                // NOTE: keep in sync with src/main/resources (except the mixin json).
+                srcDirs = ["src/${mc_group}/resources"]
+            }
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    if (is26) {
+        implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+        implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    } else {
+        mappings loom.officialMojangMappings()
+        modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = javaRelease
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.toVersion(javaRelease)
+    targetCompatibility = JavaVersion.toVersion(javaRelease)
+}
+
+def finalJarName = "${project.properties['mod_display_name']} ${project.version} [${project.minecraft_version}]-Fabric.jar"
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
+}
+
+if (is26) {
+    tasks.named('jar') {
+        archiveFileName = finalJarName
+    }
+} else {
+    tasks.named('remapJar') {
+        archiveFileName = finalJarName
+    }
+}
+
+tasks.register('copyToVersions', Copy) {
+    dependsOn is26 ? tasks.named('jar') : tasks.named('remapJar')
+    from is26 ? tasks.named('jar') : tasks.named('remapJar')
+    into project.layout.projectDirectory.dir("Versions")
+    rename { finalJarName }
+}
+
+tasks.named('build') {
+    finalizedBy tasks.named('copyToVersions')
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            from components.java
+        }
+    }
+}

@@ -1,0 +1,41 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+# Minecraft / Fabric run dirs
+run/
+run-*/
+
+# Built jars — используйте GitHub Releases вместо коммита бинарников
+Versions/
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+*.hprof
+
+# Local build marker
+build-one.done
+

@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        maven { url = "https://maven.fabricmc.net/" }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id "net.fabricmc.fabric-loom-remap" version "${loom_version}" apply false
+    id "net.fabricmc.fabric-loom" version "${loom_version}" apply false
+}
+
+rootProject.name = "shulker-viewer"

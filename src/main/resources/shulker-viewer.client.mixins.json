@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "com.shulkerviewer.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "AbstractContainerScreenMixin",
+    "AbstractContainerScreenClickMixin",
+    "AbstractContainerScreenAccessor",
+    "InventoryAccessor",
+    "ItemStackMixin",
+    "KeyMappingAccessor",
+    "ScreenAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
